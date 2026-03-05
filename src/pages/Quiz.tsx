@@ -7,6 +7,7 @@ import { QuestionAnswer } from "@/types";
 import { getRecommendations } from "@/lib/scoring";
 import { laptops } from "@/data/laptops";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Quiz = () => {
   const navigate = useNavigate();
@@ -41,19 +42,29 @@ const Quiz = () => {
 
       <div className="container py-12 md:py-16">
         {/* Results header */}
-        <div className="text-center mb-12 animate-fade-in">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
             Your Top 3 Recommendations
           </h1>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Based on your preferences, here are the gaming laptops we think you'll love.
           </p>
-        </div>
+        </motion.div>
 
         {/* Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           {results.map((result, i) => (
-            <div key={result.laptop.id} className="animate-fade-in" style={{ animationDelay: `${i * 150}ms` }}>
+            <motion.div
+              key={result.laptop.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.15, duration: 0.5 }}
+            >
               <LaptopCard
                 laptop={result.laptop}
                 rank={i}
@@ -61,17 +72,21 @@ const Quiz = () => {
                 score={result.score}
                 onViewDetails={(id) => navigate(`/product/${id}`)}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Comparison table */}
-        <div className="animate-fade-in" style={{ animationDelay: "500ms" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
           <h2 className="font-display text-2xl font-bold text-foreground mb-6 text-center">
             Side-by-Side Comparison
           </h2>
           <ComparisonTable laptops={results} />
-        </div>
+        </motion.div>
 
         {/* Back */}
         <div className="text-center mt-12">

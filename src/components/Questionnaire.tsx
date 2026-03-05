@@ -1,6 +1,7 @@
 import { QuestionAnswer } from "@/types";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface QuestionnaireProps {
   onComplete: (answers: QuestionAnswer) => void;
@@ -19,10 +20,10 @@ const questions: QuestionConfig[] = [
     title: "What's your budget?",
     subtitle: "This helps us narrow down the best options for you.",
     options: [
-      { value: "under-800", label: "Under $800", description: "Best value picks" },
-      { value: "800-1000", label: "$800 – $1,000", description: "Sweet spot for performance" },
-      { value: "1000-1300", label: "$1,000 – $1,300", description: "Premium mid-range" },
-      { value: "1300-1500", label: "$1,300 – $1,500", description: "Top-tier options" },
+      { value: "under-800", label: "Under ₹65,000", description: "Best value picks" },
+      { value: "800-1000", label: "₹65,000 – ₹85,000", description: "Sweet spot for performance" },
+      { value: "1000-1300", label: "₹85,000 – ₹1,10,000", description: "Premium mid-range" },
+      { value: "1300-1500", label: "₹1,10,000 – ₹1,25,000", description: "Top-tier options" },
     ],
   },
   {
@@ -81,6 +82,7 @@ const questions: QuestionConfig[] = [
 const Questionnaire = ({ onComplete }: QuestionnaireProps) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Partial<QuestionAnswer>>({});
+  const [direction, setDirection] = useState(1);
 
   const current = questions[step];
   const progress = ((step + 1) / questions.length) * 100;
@@ -92,6 +94,7 @@ const Questionnaire = ({ onComplete }: QuestionnaireProps) => {
 
   const handleNext = () => {
     if (step < questions.length - 1) {
+      setDirection(1);
       setStep(step + 1);
     } else {
       onComplete(answers as QuestionAnswer);
@@ -99,16 +102,27 @@ const Questionnaire = ({ onComplete }: QuestionnaireProps) => {
   };
 
   const handleBack = () => {
-    if (step > 0) setStep(step - 1);
+    if (step > 0) {
+      setDirection(-1);
+      setStep(step - 1);
+    }
+  };
+
+  const slideVariants = {
+    enter: (dir: number) => ({ x: dir > 0 ? 80 : -80, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? -80 : 80, opacity: 0 }),
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Progress bar */}
       <div className="w-full bg-secondary h-1">
-        <div
-          className="h-1 bg-primary transition-all duration-500 ease-out"
-          style={{ width: `${progress}%` }}
+        <motion.div
+          className="h-1 bg-primary"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         />
       </div>
 
@@ -119,30 +133,44 @@ const Questionnaire = ({ onComplete }: QuestionnaireProps) => {
             Question {step + 1} of {questions.length}
           </p>
 
-          {/* Question */}
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2 animate-fade-in">
-            {current.title}
-          </h2>
-          <p className="text-muted-foreground mb-8">{current.subtitle}</p>
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={step}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
+              {/* Question */}
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+                {current.title}
+              </h2>
+              <p className="text-muted-foreground mb-8">{current.subtitle}</p>
 
-          {/* Options */}
-          <div className="space-y-3 mb-8" key={step}>
-            {current.options.map((option, i) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                className={`w-full text-left rounded-xl border-2 p-4 transition-all duration-200 animate-fade-in ${
-                  answers[current.key] === option.value
-                    ? "border-primary bg-primary/5 shadow-card"
-                    : "border-border bg-card hover:border-primary/30 hover:bg-surface"
-                }`}
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                <div className="font-semibold text-card-foreground">{option.label}</div>
-                <div className="text-sm text-muted-foreground mt-0.5">{option.description}</div>
-              </button>
-            ))}
-          </div>
+              {/* Options */}
+              <div className="space-y-3 mb-8">
+                {current.options.map((option, i) => (
+                  <motion.button
+                    key={option.value}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08, duration: 0.3 }}
+                    onClick={() => handleSelect(option.value)}
+                    className={`w-full text-left rounded-xl border-2 p-4 transition-all duration-200 ${
+                      answers[current.key] === option.value
+                        ? "border-primary bg-primary/5 shadow-card"
+                        : "border-border bg-card hover:border-primary/30 hover:bg-surface"
+                    }`}
+                  >
+                    <div className="font-semibold text-card-foreground">{option.label}</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">{option.description}</div>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Navigation */}
           <div className="flex items-center justify-between">

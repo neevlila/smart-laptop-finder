@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { laptops } from "@/data/laptops";
 import { ArrowLeft, Star, ExternalLink } from "lucide-react";
+import { getLaptopImage } from "@/assets/laptops";
+import { motion } from "framer-motion";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -49,20 +51,27 @@ const ProductDetail = () => {
       </nav>
 
       <div className="container py-12 max-w-4xl">
-        <div className="animate-fade-in">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           {/* Header */}
           <div className="flex flex-col md:flex-row gap-8 mb-12">
             <div className="md:w-2/5">
-              <div className="w-full aspect-square bg-surface rounded-xl flex items-center justify-center">
-                <span className="text-5xl font-display font-bold text-muted-foreground/15">
-                  {laptop.name.split(" ")[0]}
-                </span>
+              <div className="w-full aspect-square bg-surface rounded-xl flex items-center justify-center overflow-hidden">
+                <img
+                  src={getLaptopImage(laptop.id)}
+                  alt={laptop.name}
+                  className="h-full w-full object-contain p-4"
+                  loading="lazy"
+                />
               </div>
             </div>
             <div className="md:w-3/5">
               <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">{laptop.name}</h1>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl font-bold text-primary">${laptop.price}</span>
+                <span className="text-3xl font-bold text-primary">₹{laptop.price.toLocaleString("en-IN")}</span>
                 <div className="flex items-center gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className={`h-4 w-4 ${i < Math.floor(laptop.rating) ? "fill-highlight text-highlight" : "text-border"}`} />
@@ -82,14 +91,25 @@ const ProductDetail = () => {
 
           {/* Scores */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            {scores.map((s) => (
-              <div key={s.label} className="rounded-xl border border-border bg-card p-4 text-center shadow-card">
+            {scores.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="rounded-xl border border-border bg-card p-4 text-center shadow-card"
+              >
                 <div className="text-2xl font-bold text-foreground">{s.value}</div>
                 <div className="text-xs font-medium text-muted-foreground mt-1">{s.label}</div>
                 <div className="mt-2 h-1.5 rounded-full bg-secondary overflow-hidden">
-                  <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: `${s.value}%` }} />
+                  <motion.div
+                    className="h-full rounded-full bg-primary"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${s.value}%` }}
+                    transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
+                  />
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -131,7 +151,7 @@ const ProductDetail = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
