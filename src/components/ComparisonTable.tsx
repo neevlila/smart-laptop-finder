@@ -6,7 +6,7 @@ interface ComparisonTableProps {
 
 const ComparisonTable = ({ laptops }: ComparisonTableProps) => {
   const specs = [
-    { label: "Price", key: (l: Laptop) => `$${l.price}` },
+    { label: "Price", key: (l: Laptop) => `₹${l.price.toLocaleString("en-IN")}` },
     { label: "CPU", key: (l: Laptop) => l.cpu },
     { label: "GPU", key: (l: Laptop) => l.gpu },
     { label: "RAM", key: (l: Laptop) => l.ram },

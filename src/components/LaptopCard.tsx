@@ -1,5 +1,7 @@
 import { Laptop } from "@/types";
 import { Star } from "lucide-react";
+import { getLaptopImage } from "@/assets/laptops";
+import { motion } from "framer-motion";
 
 interface LaptopCardProps {
   laptop: Laptop;
@@ -18,7 +20,11 @@ const LaptopCard = ({ laptop, rank, matchReason, score, onViewDetails }: LaptopC
   ];
 
   return (
-    <div className="group relative rounded-xl border border-border bg-card p-6 shadow-card transition-all duration-300 hover:shadow-elevated hover:-translate-y-1">
+    <motion.div
+      className="group relative rounded-xl border border-border bg-card p-6 shadow-card transition-all duration-300 hover:shadow-elevated hover:-translate-y-1"
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
       <div className="flex items-start justify-between mb-4">
         <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${rankColors[rank]}`}>
           #{rank + 1} {rankLabels[rank]}
@@ -28,12 +34,15 @@ const LaptopCard = ({ laptop, rank, matchReason, score, onViewDetails }: LaptopC
 
       <div className="flex flex-col items-center mb-4">
         <div className="w-full h-40 bg-surface rounded-lg flex items-center justify-center mb-4 overflow-hidden">
-          <div className="text-4xl font-display font-bold text-muted-foreground/20">
-            {laptop.name.split(" ")[0]}
-          </div>
+          <img
+            src={getLaptopImage(laptop.id)}
+            alt={laptop.name}
+            className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
         </div>
         <h3 className="font-display text-lg font-bold text-card-foreground text-center">{laptop.name}</h3>
-        <p className="text-2xl font-bold text-primary mt-1">${laptop.price}</p>
+        <p className="text-2xl font-bold text-primary mt-1">₹{laptop.price.toLocaleString("en-IN")}</p>
       </div>
 
       <div className="flex items-center justify-center gap-1 mb-3">
@@ -79,7 +88,7 @@ const LaptopCard = ({ laptop, rank, matchReason, score, onViewDetails }: LaptopC
           View Deal →
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
