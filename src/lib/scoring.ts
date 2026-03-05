@@ -83,11 +83,15 @@ export function deriveWeights(answers: QuestionAnswer): ScoringWeights {
  * Filters laptops by budget range
  */
 function filterByBudget(laptops: Laptop[], budget: QuestionAnswer["budget"]): Laptop[] {
+  // budget values are in thousands (e.g. "under-800" means under ₹80,000).
+  // laptop.price is stored as a full rupee amount (e.g. 65999), so we need
+  // to map the string keys to realistic rupee ranges.
   const ranges: Record<string, [number, number]> = {
-    "under-800": [0, 800],
-    "800-1000": [800, 1000],
-    "1000-1300": [1000, 1300],
-    "1300-1500": [1300, 1500],
+    // using explicit values keeps the intent clear and avoids off-by-thousand
+    "under-800": [0, 80000],         // up to ₹80 000
+    "800-1000": [80000, 100000],     // ₹80 000–₹1 00 000
+    "1000-1300": [100000, 130000],   // ₹1 00 000–₹1 30 000
+    "1300-1500": [130000, 150000],   // ₹1 30 000–₹1 50 000
   };
   const [min, max] = ranges[budget];
   return laptops.filter((l) => l.price >= min && l.price <= max);
@@ -122,7 +126,7 @@ export function getRecommendations(
   const filtered = filterByBudget(allLaptops, answers.budget);
 
   // If budget filter returns too few, expand to all laptops under $1500
-  const pool = filtered.length >= 3 ? filtered : allLaptops.filter((l) => l.price <= 1500);
+  const pool = filtered.length >= 3 ? filtered : allLaptops.filter((l) => l.price <= 150000);
 
   const scored = pool.map((laptop) => {
     const score = calculateScore(laptop, weights);

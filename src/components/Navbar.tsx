@@ -26,7 +26,8 @@ const Navbar = ({ children, showBrand = true, showBack = false, rightContent }: 
             </button>
           )}
           {showBrand && (
-            <button onClick={() => navigate("/")} className="font-display text-lg font-bold text-foreground">
+            <button onClick={() => navigate("/")} className="flex items-center gap-2 font-display text-lg font-bold text-foreground">
+              <img src="/favicon.png" alt="SmartPurchase" className="h-11 w-11" />
               Smart<span className="text-primary">Purchase</span>
             </button>
           )}

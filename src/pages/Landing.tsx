@@ -162,28 +162,6 @@ const Landing = () => {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="container pb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center rounded-2xl border border-border bg-card p-10 shadow-elevated"
-          >
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">
-              Ready to Find Your Perfect Laptop?
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              It only takes 60 seconds. No sign-up, no spam, just smart recommendations.
-            </p>
-            <button
-              onClick={() => navigate("/quiz")}
-              className="group inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-hero transition-all duration-300 hover:shadow-elevated hover:-translate-y-0.5"
-            >
-              Take the Quiz <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
-          </motion.div>
-        </section>
 
         {/* Footer */}
         <footer className="border-t border-border py-8">
