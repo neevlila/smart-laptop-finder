@@ -36,9 +36,11 @@ const Quiz = () => {
           rightContent={
             <button
               onClick={() => setResults(null)}
-              className="flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg bg-secondary px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-secondary-foreground hover:bg-secondary/80 transition-colors whitespace-nowrap"
             >
-              <RotateCcw className="h-3.5 w-3.5" /> Retake Quiz
+              <RotateCcw className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Retake Quiz</span>
+              <span className="sm:hidden">Retake</span>
             </button>
           }
         />
