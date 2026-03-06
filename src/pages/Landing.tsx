@@ -24,8 +24,8 @@ const Landing = () => {
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: "Our Algorithm Matches You",
-      description: "We score 28+ laptops across performance, portability, battery, and display.",
+      title: "Smart Matching Algorithm",
+      description: "We score 25+ laptops across performance, portability, battery, and display.",
     },
     {
       icon: <Trophy className="h-6 w-6" />,
@@ -36,13 +36,13 @@ const Landing = () => {
 
   const trustBadges = [
     { icon: <Shield className="h-4 w-4" />, text: "Unbiased Recommendations" },
-    { icon: <Monitor className="h-4 w-4" />, text: "28+ Laptops Analyzed" },
+    { icon: <Monitor className="h-4 w-4" />, text: "25+ Laptops Analyzed" },
     { icon: <Zap className="h-4 w-4" />, text: "60 Second Results" },
     { icon: <Users className="h-4 w-4" />, text: "10,000+ Users" },
   ];
 
   const stats = [
-    { value: "28+", label: "Laptops Analyzed" },
+    { value: "25+", label: "Laptops Analyzed" },
     { value: "60s", label: "Average Time" },
     { value: "95%", label: "Satisfaction Rate" },
     { value: "₹50K–1.5L", label: "Price Range" },
@@ -72,7 +72,7 @@ const Landing = () => {
               className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
             >
               Stop scrolling through endless reviews. Answer 6 simple questions and get personalized
-              recommendations from 28+ gaming laptops under ₹1,25,000.
+              recommendations from 25+ gaming laptops under ₹1,25,000.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
